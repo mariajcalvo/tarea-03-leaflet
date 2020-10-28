@@ -1,0 +1,49 @@
+---
+title: "PF-0953 Programación geoespacial en R<br>Tarea 03: Leaflet"
+author: "Manuel Vargas"
+date: "2020-10-28"
+output:
+  html_document:
+    theme: readable    
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Descripción general
+En esta tarea, aplicará varios comandos de graficación y mapeo en el lenguaje [R](https://www.r-project.org/). El resultado final será un documento en la sintaxis [R Markdown](https://rmarkdown.rstudio.com/) publicado en [GitHub Pages](https://pages.github.com/).
+
+## Fecha de entrega y entregables
+La fecha límite de entrega es el **miércoles 4 de noviembre de 2020 antes de las 5:00 p.m. NO SE ACEPTARÁN ENTREGAS DESPUÉS DE ESA FECHA Y HORA.** Debe enviarle al profesor por correo electrónico la dirección del sitio en GitHub Pages resultante.
+
+El proyecto puede realizarse en grupos de un máximo de tres estudiantes. Por favor copie el mensaje de correo a las direcciones de todos los integrantes del grupo e incluya los nombres de los integrantes en los metadatos del documento, en lugar del nombre del profesor. Debe enviarse solamente un mensaje por grupo.
+
+## Trabajo previo
+Se recomienda leer el material preparado por el profesor para las lecciones y consultar la documentación y tutoriales de los paquetes de R que se utilizarán.
+
+Puede bifurcar y clonar este documento ([]()) para utilizarlo como base, si lo desea.
+
+## Desarrollo
+Realice los siguientes ejercicios de graficación en R (el valor porcentual de cada uno se muestra entre paréntesis).
+
+1. (40%) 
+
+```{r}
+```
+
+2. (30%) 
+
+```{r}
+
+```
+
+3. (30%)
+
+```{r}
+
+```
