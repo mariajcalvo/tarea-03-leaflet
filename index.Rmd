@@ -30,13 +30,14 @@ Se recomienda leer el material preparado por el profesor para las lecciones y co
 Desarrolle un mapa en Leaflet con las siguientes características (el valor porcentual de cada aspecto a evaluar se muestra entre paréntesis):
 
 - (5%) Tres capas base (puede elegirlas).
-- Cuatro capas sobrepuestas (overlay):
-    a. (20%) Mapa de coropletas de casos positivos de COVID-19 en cantones de Costa Rica.
-    b. (20%) Mapa de coropletas de casos activos de COVID-19 en cantones de Costa Rica.
-    c. (20%) Mapa de coropletas de casos recuperados de COVID-19 en cantones de Costa Rica.
-    d. (20%) Mapa de coropletas de casos fallecidos de COVID-19 en cantones de Costa Rica.
-- (5%) Control de capas para activar y desactivar las capas base y sobrepuestas.
+- Cuatro capas sobrepuestas (*overlay*):
+    a. (15%) Mapa de coropletas de casos positivos de COVID-19 en cantones de Costa Rica.
+    b. (15%) Mapa de coropletas de casos activos de COVID-19 en cantones de Costa Rica.
+    c. (15%) Mapa de coropletas de casos recuperados de COVID-19 en cantones de Costa Rica.
+    d. (15%) Mapa de coropletas de casos fallecidos de COVID-19 en cantones de Costa Rica.
+- (10%) Leyendas que muestren el significado de los colores en cada capa sobrepuesta.
+- (10%) Control de capas para activar y desactivar las capas base y sobrepuestas.
 - (5%) Control de escala.
-- (5%) Al hacer clic sobre el polígono de un cantón, debe mostrarse el nombre del cantón y la cantidad de casos correspondiente a la capa (positivos, activos, recuperados o fallecidos).
+- (10%) Al hacer clic sobre el polígono de un cantón, debe mostrarse el nombre del cantón y la cantidad de casos correspondiente a la capa (positivos, activos, recuperados o fallecidos).
 
 Utilice la capa de cantones del Instituto Geográfico Nacional (IGN) publicada en el [Sistema Nacional de Información terrritorial (SNIT)](https://www.snitcr.go.cr/) y los [datos de COVID-19 del Ministerio de Salud](http://geovision.uned.ac.cr/oges/) del 2020-10-27 disponibles en [https://github.com/pf0953-programaciongeoespacialr-2020/datos/tree/master/covid19/ms](https://github.com/pf0953-programaciongeoespacialr-2020/datos/tree/master/covid19/ms).
