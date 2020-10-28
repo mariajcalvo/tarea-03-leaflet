@@ -1537,26 +1537,34 @@ div.tocify {
 
 <div id="descripción-general" class="section level2">
 <h2>Descripción general</h2>
-<p>En esta tarea, aplicará varios comandos de graficación y mapeo en el lenguaje <a href="https://www.r-project.org/">R</a>. El resultado final será un documento en la sintaxis <a href="https://rmarkdown.rstudio.com/">R Markdown</a> publicado en <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+<p>En esta tarea, desarrollará un mapa para la Web mediante la biblioteca <a href="https://rstudio.github.io/leaflet/">Leaflet</a>. El resultado final será un documento en la sintaxis <a href="https://rmarkdown.rstudio.com/">R Markdown</a> publicado en <a href="https://pages.github.com/">GitHub Pages</a>.</p>
 </div>
 <div id="fecha-de-entrega-y-entregables" class="section level2">
 <h2>Fecha de entrega y entregables</h2>
 <p>La fecha límite de entrega es el <strong>miércoles 4 de noviembre de 2020 antes de las 5:00 p.m. NO SE ACEPTARÁN ENTREGAS DESPUÉS DE ESA FECHA Y HORA.</strong> Debe enviarle al profesor por correo electrónico la dirección del sitio en GitHub Pages resultante.</p>
-<p>El proyecto puede realizarse en grupos de un máximo de tres estudiantes. Por favor copie el mensaje de correo a las direcciones de todos los integrantes del grupo e incluya los nombres de los integrantes en los metadatos del documento, en lugar del nombre del profesor. Debe enviarse solamente un mensaje por grupo.</p>
+<p>El proyecto puede realizarse en grupos de un máximo de tres estudiantes. Por favor copie el mensaje de correo a las direcciones de todos los integrantes del grupo e incluya los nombres de los integrantes en los metadatos del documento. Debe enviarse solamente un mensaje por grupo.</p>
 </div>
 <div id="trabajo-previo" class="section level2">
 <h2>Trabajo previo</h2>
 <p>Se recomienda leer el material preparado por el profesor para las lecciones y consultar la documentación y tutoriales de los paquetes de R que se utilizarán.</p>
-<p>Puede bifurcar y clonar este documento (<a href></a>) para utilizarlo como base, si lo desea.</p>
 </div>
 <div id="desarrollo" class="section level2">
 <h2>Desarrollo</h2>
-<p>Realice los siguientes ejercicios de graficación en R (el valor porcentual de cada uno se muestra entre paréntesis).</p>
-<ol style="list-style-type: decimal">
-<li><p>(40%)</p></li>
-<li><p>(30%)</p></li>
-<li><p>(30%)</p></li>
-</ol>
+<p>Desarrolle un mapa en Leaflet con las siguientes características (el valor porcentual de cada aspecto a evaluar se muestra entre paréntesis):</p>
+<ul>
+<li>(5%) Tres capas base (puede elegirlas).</li>
+<li>Cuatro capas sobrepuestas (overlay):
+<ol style="list-style-type: lower-alpha">
+<li>(20%) Mapa de coropletas de casos positivos de COVID-19 en cantones de Costa Rica.</li>
+<li>(20%) Mapa de coropletas de casos activos de COVID-19 en cantones de Costa Rica.</li>
+<li>(20%) Mapa de coropletas de casos recuperados de COVID-19 en cantones de Costa Rica.</li>
+<li>(20%) Mapa de coropletas de casos fallecidos de COVID-19 en cantones de Costa Rica.</li>
+</ol></li>
+<li>(5%) Control de capas para activar y desactivar las capas base y sobrepuestas.</li>
+<li>(5%) Control de escala.</li>
+<li>(5%) Al hacer clic sobre el polígono de un cantón, debe mostrarse el nombre del cantón y la cantidad de casos correspondiente a la capa (positivos, activos, recuperados o fallecidos).</li>
+</ul>
+<p>Utilice la capa de cantones del Instituto Geográfico Nacional (IGN) publicada en el <a href="https://www.snitcr.go.cr/">Sistema Nacional de Información terrritorial (SNIT)</a> y los <a href="http://geovision.uned.ac.cr/oges/">datos de COVID-19 del Ministerio de Salud</a> del 2020-10-27 disponibles en <a href="https://github.com/pf0953-programaciongeoespacialr-2020/datos/tree/master/covid19/ms">https://github.com/pf0953-programaciongeoespacialr-2020/datos/tree/master/covid19/ms</a>.</p>
 </div>
 
 

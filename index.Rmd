@@ -16,34 +16,27 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Descripción general
-En esta tarea, aplicará varios comandos de graficación y mapeo en el lenguaje [R](https://www.r-project.org/). El resultado final será un documento en la sintaxis [R Markdown](https://rmarkdown.rstudio.com/) publicado en [GitHub Pages](https://pages.github.com/).
+En esta tarea, desarrollará un mapa para la Web mediante la biblioteca [Leaflet](https://rstudio.github.io/leaflet/). El resultado final será un documento en la sintaxis [R Markdown](https://rmarkdown.rstudio.com/) publicado en [GitHub Pages](https://pages.github.com/).
 
 ## Fecha de entrega y entregables
 La fecha límite de entrega es el **miércoles 4 de noviembre de 2020 antes de las 5:00 p.m. NO SE ACEPTARÁN ENTREGAS DESPUÉS DE ESA FECHA Y HORA.** Debe enviarle al profesor por correo electrónico la dirección del sitio en GitHub Pages resultante.
 
-El proyecto puede realizarse en grupos de un máximo de tres estudiantes. Por favor copie el mensaje de correo a las direcciones de todos los integrantes del grupo e incluya los nombres de los integrantes en los metadatos del documento, en lugar del nombre del profesor. Debe enviarse solamente un mensaje por grupo.
+El proyecto puede realizarse en grupos de un máximo de tres estudiantes. Por favor copie el mensaje de correo a las direcciones de todos los integrantes del grupo e incluya los nombres de los integrantes en los metadatos del documento. Debe enviarse solamente un mensaje por grupo.
 
 ## Trabajo previo
 Se recomienda leer el material preparado por el profesor para las lecciones y consultar la documentación y tutoriales de los paquetes de R que se utilizarán.
 
-Puede bifurcar y clonar este documento ([]()) para utilizarlo como base, si lo desea.
-
 ## Desarrollo
-Realice los siguientes ejercicios de graficación en R (el valor porcentual de cada uno se muestra entre paréntesis).
+Desarrolle un mapa en Leaflet con las siguientes características (el valor porcentual de cada aspecto a evaluar se muestra entre paréntesis):
 
-1. (40%) 
+- (5%) Tres capas base (puede elegirlas).
+- Cuatro capas sobrepuestas (overlay):
+    a. (20%) Mapa de coropletas de casos positivos de COVID-19 en cantones de Costa Rica.
+    b. (20%) Mapa de coropletas de casos activos de COVID-19 en cantones de Costa Rica.
+    c. (20%) Mapa de coropletas de casos recuperados de COVID-19 en cantones de Costa Rica.
+    d. (20%) Mapa de coropletas de casos fallecidos de COVID-19 en cantones de Costa Rica.
+- (5%) Control de capas para activar y desactivar las capas base y sobrepuestas.
+- (5%) Control de escala.
+- (5%) Al hacer clic sobre el polígono de un cantón, debe mostrarse el nombre del cantón y la cantidad de casos correspondiente a la capa (positivos, activos, recuperados o fallecidos).
 
-```{r}
-```
-
-2. (30%) 
-
-```{r}
-
-```
-
-3. (30%)
-
-```{r}
-
-```
+Utilice la capa de cantones del Instituto Geográfico Nacional (IGN) publicada en el [Sistema Nacional de Información terrritorial (SNIT)](https://www.snitcr.go.cr/) y los [datos de COVID-19 del Ministerio de Salud](http://geovision.uned.ac.cr/oges/) del 2020-10-27 disponibles en [https://github.com/pf0953-programaciongeoespacialr-2020/datos/tree/master/covid19/ms](https://github.com/pf0953-programaciongeoespacialr-2020/datos/tree/master/covid19/ms).
