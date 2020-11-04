@@ -1,7 +1,7 @@
 ---
 title: "PF-0953 Programación geoespacial en R<br>Tarea 03: Leaflet"
-author: "Manuel Vargas"
-date: "2020-10-28"
+author: "María José Calvo Sandí"
+date: "2020-11-04"
 output:
   html_document:
     theme: readable    
@@ -32,6 +32,283 @@ Desarrolle un mapa en Leaflet con las siguientes características (el valor porc
 - (5%) Tres capas base (puede elegirlas).
 - Cuatro capas sobrepuestas (*overlay*):
     a. (15%) Mapa de coropletas de casos positivos de COVID-19 en cantones de Costa Rica.
+
+```{r message = FALSE, warning = FALSE}
+# Paquete para manejo de datos vectoriales
+library(sf)
+
+# Paquete de Tidyverse para manipulación de datos
+library(dplyr)
+
+# Paquete con conjuntos de datos geoespaciales
+library(spData)
+
+# Paquete para mapas en la Web
+library(leaflet)
+
+# tidyr
+library(tidyr)
+
+# URL base del servicio WFS IGN 1:5mil
+url_base_wfs_ign_5mil <- "http://geos.snitcr.go.cr/be/IGN_5/wfs?"
+
+# URL base del servicio WFS IGN 1:200mil
+url_base_wfs_ign_200mil <- "http://geos.snitcr.go.cr/be/IGN_200/wfs?"
+
+# URL de las solicitudes de las capas
+solicitud_provincias_wfs <- 
+  "request=GetFeature&service=WFS&version=2.0.0&typeName=IGN_5:limiteprovincial_5k&outputFormat=application/json"
+
+solicitud_cantones_wfs <- 
+  "request=GetFeature&service=WFS&version=2.0.0&typeName=IGN_5:limitecantonal_5k&outputFormat=application/json"
+
+
+# Recuperación y simplificación de las capas
+# Provincias de Costa Rica
+cr_provincias <-
+  st_read(paste0(url_base_wfs_ign_5mil, solicitud_provincias_wfs)) %>%
+  st_simplify(dTolerance = 1000)
+cr_provincias_wgs84 <- 
+  cr_provincias %>%
+  st_transform(4326)
+
+# Cantones de Costa Rica
+cr_cantones <-
+  st_read(paste0(url_base_wfs_ign_5mil, solicitud_cantones_wfs)) %>%
+  st_simplify(dTolerance = 1000)
+cr_cantones_wgs84 <- 
+  cr_cantones %>%
+  st_transform(4326)
+
+
+# Casos positivos de Costa Rica
+df_positivos_cantones_ancho <- 
+  read.csv(
+    "https://raw.githubusercontent.com/pf0953-programaciongeoespacialr-2020/datos/master/covid19/ms/covid19-positivos-cantones-20201027.csv"
+  )
+
+
+# Data frame con fechas en las filas
+df_positivos_cantones <-
+  df_positivos_cantones_ancho %>%
+  pivot_longer(
+    cols = c(-cod_provin, -provincia, -cod_canton, -canton), 
+    names_to = "fecha", 
+    values_to = "positivos"
+  )
+
+# Cambio de tipo de la columna "fecha"
+df_positivos_cantones$fecha <- as.Date(df_positivos_cantones$fecha, "X%d.%m.%Y")
+
+# Data frame de casos positivos por cantón en la última fecha
+df_positivos_cantones_ultima_fecha <- 
+  df_positivos_cantones %>%
+  filter(fecha == max(fecha, na.rm = TRUE)) %>%
+  select(cod_canton, positivos)
+
+# Objeto sf de casos positivos en cantones en la última fecha
+sf_positivos_cantones_ultima_fecha <-
+  left_join(cr_cantones_wgs84, df_positivos_cantones_ultima_fecha, by = c('cod_canton')) %>%
+  arrange(desc(positivos))
+
+# Casos activos de Costa Rica
+df_activos_cantones_ancho <- 
+  read.csv(
+    "https://raw.githubusercontent.com/pf0953-programaciongeoespacialr-2020/datos/master/covid19/ms/covid19-activos-cantones-20201027.csv"
+  )
+
+
+# Data frame con fechas en las filas
+df_activos_cantones <-
+  df_activos_cantones_ancho %>%
+  pivot_longer(
+    cols = c(-cod_provin, -provincia, -cod_canton, -canton), 
+    names_to = "fecha", 
+    values_to = "activos"
+  )
+
+# Cambio de tipo de la columna "fecha"
+df_activos_cantones$fecha <- as.Date(df_activos_cantones$fecha, "X%d.%m.%Y")
+
+# Data frame de casos activos por cantón en la última fecha
+df_activos_cantones_ultima_fecha <- 
+  df_activos_cantones %>%
+  filter(fecha == max(fecha, na.rm = TRUE)) %>%
+  select(cod_canton, activos)
+
+# Objeto sf de casos activos en cantones en la última fecha
+sf_activos_cantones_ultima_fecha <-
+  left_join(cr_cantones_wgs84, df_activos_cantones_ultima_fecha, by = c('cod_canton')) %>%
+  arrange(desc(activos))
+
+# Casos recuperados de Costa Rica
+df_recuperados_cantones_ancho <- 
+  read.csv(
+    "https://raw.githubusercontent.com/pf0953-programaciongeoespacialr-2020/datos/master/covid19/ms/covid19-recuperados-cantones-20201027.csv"
+  )
+
+
+# Data frame con fechas en las filas
+df_recuperados_cantones <-
+  df_recuperados_cantones_ancho %>%
+  pivot_longer(
+    cols = c(-cod_provin, -provincia, -cod_canton, -canton), 
+    names_to = "fecha", 
+    values_to = "recuperados"
+  )
+
+# Cambio de tipo de la columna "fecha"
+df_recuperados_cantones$fecha <- as.Date(df_recuperados_cantones$fecha, "X%d.%m.%Y")
+
+# Data frame de casos recuperados por cantón en la última fecha
+df_recuperados_cantones_ultima_fecha <- 
+  df_recuperados_cantones %>%
+  filter(fecha == max(fecha, na.rm = TRUE)) %>%
+  select(cod_canton, recuperados)
+
+# Objeto sf de casos recuperados en cantones en la última fecha
+sf_recuperados_cantones_ultima_fecha <-
+  left_join(cr_cantones_wgs84, df_recuperados_cantones_ultima_fecha, by = c('cod_canton')) %>%
+  arrange(desc(recuperados))
+
+
+
+# Casos fallecidos de Costa Rica
+df_fallecidos_cantones_ancho <- 
+  read.csv(
+    "https://raw.githubusercontent.com/pf0953-programaciongeoespacialr-2020/datos/master/covid19/ms/covid19-fallecidos-cantones-20201027.csv"
+  )
+
+
+# Data frame con fechas en las filas
+df_fallecidos_cantones <-
+  df_fallecidos_cantones_ancho %>%
+  pivot_longer(
+    cols = c(-cod_provin, -provincia, -cod_canton, -canton), 
+    names_to = "fecha", 
+    values_to = "fallecidos"
+  )
+
+# Cambio de tipo de la columna "fecha"
+df_fallecidos_cantones$fecha <- as.Date(df_fallecidos_cantones$fecha, "X%d.%m.%Y")
+
+# Data frame de casos fallecidos por cantón en la última fecha
+df_fallecidos_cantones_ultima_fecha <- 
+  df_fallecidos_cantones %>%
+  filter(fecha == max(fecha, na.rm = TRUE)) %>%
+  select(cod_canton, fallecidos)
+
+# Objeto sf de casos fallecidos en cantones en la última fecha
+sf_fallecidos_cantones_ultima_fecha <-
+  left_join(cr_cantones_wgs84, df_fallecidos_cantones_ultima_fecha, by = c('cod_canton')) %>%
+  arrange(desc(fallecidos))
+
+binsP <- c(0, 500, 1000, 2000, 5000, Inf)
+paleta_Positivos <- colorBin("Spectral", domain = sf_positivos_cantones_ultima_fecha$positivos, bins = binsP)
+
+binsA <- c(0, 500, 1000, 2000, 5000, Inf)
+paleta_activos <- colorBin("YlOrRd", domain = sf_activos_cantones_ultima_fecha$activos, bins = binsA)
+
+binsR <- c(0, 500, 1000, 2000, 5000, Inf)
+paleta_recuperados <- colorBin("RdYlBu", domain = sf_recuperados_cantones_ultima_fecha$recuperados, bins = binsR)
+
+binsF <- c(0, 15, 25, 50, 100, Inf)
+paleta_fallecidos <- colorBin("YlGnBu", domain = sf_fallecidos_cantones_ultima_fecha$fallecidos, bins = binsF)
+
+m <- leaflet() %>% 
+  fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>% 
+  addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
+  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  
+  # Capa Casos Positivos"
+  addPolygons(data = sf_positivos_cantones_ultima_fecha, fillColor = ~paleta_Positivos(positivos), stroke=T, fillOpacity = 1,
+              color="black", weight=0.2, opacity= 0.5,
+              group = "Positivos",
+              popup = paste(
+                "Provincia: ", sf_positivos_cantones_ultima_fecha$provincia, "<br>",
+                "Cantón: ", sf_positivos_cantones_ultima_fecha$canton, "<br>",
+                "Positivos: ", sf_positivos_cantones_ultima_fecha$positivos
+              )
+
+              
+  ) %>%
+  addLegend("bottomright", pal = paleta_Positivos, values = sf_positivos_cantones_ultima_fecha$positivos,
+            title = "Casos Positivos",
+            opacity = 1,
+            group="Positivos"
+            
+  ) %>%  
+  
+  # Capa Casos Activos"
+  addPolygons(data =  sf_activos_cantones_ultima_fecha, fillColor = ~paleta_activos(activos), stroke=T, fillOpacity = 1,
+              color="black", weight=0.2, opacity= 0.5,
+              group = "Activos",
+              popup = paste(
+                "Provincia: ", sf_activos_cantones_ultima_fecha$provincia, "<br>",
+                "Cantón: ", sf_activos_cantones_ultima_fecha$canton, "<br>",
+                "Activos: ", sf_activos_cantones_ultima_fecha$activos
+              )           
+              
+  ) %>%
+  addLegend("bottomright", pal = paleta_activos, values = sf_activos_cantones_ultima_fecha$activos,
+            title = "Casos Activos",
+            opacity = 1,
+            group="Activos"
+            
+# Capa Casos Recuperados"          
+  ) %>%    
+  addPolygons(data =  sf_recuperados_cantones_ultima_fecha, fillColor = ~paleta_recuperados(recuperados), stroke=T, fillOpacity = 1,
+              color="black", weight=0.2, opacity= 0.5,
+              group = "Recuperados",
+              popup = paste(
+                "Provincia: ", sf_recuperados_cantones_ultima_fecha$provincia, "<br>",
+                "Cantón: ", sf_recuperados_cantones_ultima_fecha$canton, "<br>",
+                "Recuperados: ", sf_recuperados_cantones_ultima_fecha$recuperados
+              )           
+              
+  ) %>%
+  addLegend("bottomright", pal = paleta_recuperados, values = sf_recuperados_cantones_ultima_fecha$recuperados,
+            title = "Casos Recuperados",
+            opacity = 1,
+            group="Recuperados"  
+            
+            
+# Capa Casos Fallecidos"          
+  ) %>%    
+  addPolygons(data =  sf_fallecidos_cantones_ultima_fecha, fillColor = ~paleta_fallecidos(fallecidos), stroke=T, fillOpacity = 1,
+              color="black", weight=0.2, opacity= 0.5,
+              group = "Fallecidos",
+              popup = paste(
+                "Provincia: ", sf_fallecidos_cantones_ultima_fecha$provincia, "<br>",
+                "Cantón: ", sf_fallecidos_cantones_ultima_fecha$canton, "<br>",
+                "Fallecidos: ", sf_fallecidos_cantones_ultima_fecha$fallecidos
+              )           
+              
+  ) %>%
+  addLegend("bottomright", pal = paleta_fallecidos, values = sf_fallecidos_cantones_ultima_fecha$fallecidos,
+            title = "Casos Fallecidos",
+            opacity = 1,
+            group="Fallecidos"              
+   ) %>%  
+  addLayersControl(
+    baseGroups = c("OpenStreetMap", "Stamen Toner Lite", "Imágenes de ESRI"),
+    overlayGroups = c("Fallecidos","Recuperados","Activos","Positivos"),
+    position = "topleft",
+    options = layersControlOptions(collapsed = TRUE),
+      ) %>%
+  
+  addMiniMap(
+    toggleDisplay = TRUE,
+    position = "bottomleft",
+    tiles = providers$OpenStreetMap.Mapnik
+  )
+m
+
+
+```
+    
+    
     b. (15%) Mapa de coropletas de casos activos de COVID-19 en cantones de Costa Rica.
     c. (15%) Mapa de coropletas de casos recuperados de COVID-19 en cantones de Costa Rica.
     d. (15%) Mapa de coropletas de casos fallecidos de COVID-19 en cantones de Costa Rica.
